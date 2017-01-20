@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:p="http://primefaces.org/ui" template="/templateAccountant.xhtml">
+
+	<ui:define name="contentAccountant">
+
+		<h:form>
+			<p:growl id="messageActivate" />
+			<p:commandButton process="checkboxDT" icon="ui-icon-plusthick"
+				value="Approve" ajax="false" update="messageActivate checkboxDT"
+				actionListener="#{accountantVacationBean.approveRequests()}">
+			</p:commandButton>
+
+
+			<p:dataTable id="checkboxDT" var="req"
+				value="#{accountantVacationBean.pendingRequests}"
+				selection="#{accountantVacationBean.approvedPendingRequests}"
+				rowKey="#{req.compositeKey}" style="margin-bottom:0">
+
+				<p:column selectionMode="multiple"
+					style="width:16px;text-align:center" />
+
+				<p:column headerText="Emloyee Id">
+					<h:outputText value="#{req.employeeId}" />
+				</p:column>
+
+				<p:column headerText="Day">
+					<h:outputText value="#{req.day}" />
+				</p:column>
+
+				<p:column headerText="Type">
+					<h:outputText value="#{req.type}" />
+				</p:column>
+
+				<p:column headerText="Status">
+					<h:outputText value="#{req.status}" />
+				</p:column>
+
+				<p:column headerText="Notes">
+					<h:outputText value="#{req.notes}" />
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

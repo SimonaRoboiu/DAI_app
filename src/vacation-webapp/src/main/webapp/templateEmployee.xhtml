@@ -1,0 +1,142 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Vacation Project</title>
+</h:head>
+
+<h:body>
+	<h:form id="formbanner" style="margin: auto">
+		<h1>
+			Vacation Requests - <small><h:outputLabel
+					value="#{userSessionBean.currentUser.role} interface" /></small>
+		</h1>
+	</h:form>
+
+	<h:form id="menu" style="margin: auto">
+		<p:menubar>
+			<p:menuitem value="Dashboard" url="/templateEmployee.xhtml"
+				icon="ui-icon-plus" />
+
+			<p:menuitem value="Profile" url="/employee/profile.xhtml"
+				icon="ui-icon-person" />
+
+			<p:menuitem value="Change Password"
+				url="/employee/changePassword.xhtml" icon="ui-icon-pencil" />
+
+
+			<f:facet name="options">
+				<p:outputLabel
+					value="Welcome: #{userSessionBean.currentUser.userName}" />
+				<p:spacer width="50" height="10" />
+				<p:commandButton value="Logout" icon="ui-icon-extlink"
+					action="#{userSessionBean.logout()}" />
+			</f:facet>
+		</p:menubar>
+	</h:form>
+
+
+	<ui:insert name="contentEmployee">
+
+		<div id="requestLeft" style="float: left">
+			<p:tabView>
+				<p:tab title="New Time Off Request">
+
+					<h:form id="formNewRequest" style="margin: auto">
+						<p:growl id="messageNewRequestPto" />
+
+						<h:panelGrid columns="2" cellpadding="10">
+
+							<p:outputLabel for="type">Time off Type:</p:outputLabel>
+							<p:selectOneMenu id="type" label="type" required="true"
+								value="#{employeeVacationBean.requestedPto.type}">
+								<f:selectItem itemLabel="Vacation" itemValue=""
+									noSelectionOption="false" />
+								<f:selectItems value="#{employeeVacationBean.ptoType}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel for="startDate">Start Date:</p:outputLabel>
+							<p:calendar id="startDate"
+								value="#{employeeVacationBean.startDate}" label="startDate"
+								required="true" />
+
+							<p:outputLabel for="endDate">End Date</p:outputLabel>
+							<p:calendar id="endDate" value="#{employeeVacationBean.endDate}"
+								label="endDate" required="true" />
+
+							<p:outputLabel for="notes">Notes:</p:outputLabel>
+							<p:inputTextarea id="notes" rows="6" cols="33" autoResize="false"
+								value="#{employeeVacationBean.requestedPto.notes}" />
+
+							<h:inputHidden id="employeeId" name="employeeId" immediate="true"
+								value="#{userSessionBean.currentUser.employee.employeeId}" />
+
+							<p:commandButton id="submitPto" value="Submit"
+								action="#{employeeVacationBean.saveNewRequestPto()}"
+								icon="ui-icon-disk"
+								update="messageNewRequestPto, formNewRequest, formview"></p:commandButton>
+						</h:panelGrid>
+					</h:form>
+				</p:tab>
+			</p:tabView>
+		</div>
+
+		<div id="center" style="float: left">
+			<h:form id="formview" style="margin: auto">
+				<p:tabView id="tabview">
+					<p:tab title="Future Absence">
+						<p:dataTable var="abs" value="#{employeeVacationBean.futureAbs}">
+							<p:column headerText="Day">
+								<h:outputText value="#{abs.day}" />
+							</p:column>
+
+							<p:column headerText="Type">
+								<h:outputText value="#{abs.type}" />
+							</p:column>
+
+							<p:column headerText="Status">
+								<h:outputText value="#{abs.status}" />
+							</p:column>
+						</p:dataTable>
+					</p:tab>
+					<p:tab title="Previous Absences">
+						<p:dataTable var="abs2"
+							value="#{employeeVacationBean.previousAbs}">
+							<p:column headerText="Day">
+								<h:outputText value="#{abs2.day}" />
+							</p:column>
+
+							<p:column headerText="Type">
+								<h:outputText value="#{abs2.type}" />
+							</p:column>
+
+							<p:column headerText="Status">
+								<h:outputText value="#{abs2.status}" />
+							</p:column>
+						</p:dataTable>
+					</p:tab>
+					<p:tab title="Pending Absences">
+						<p:dataTable var="abs3" value="#{employeeVacationBean.pendingAbs}">
+							<p:column headerText="Day">
+								<h:outputText value="#{abs3.day}" />
+							</p:column>
+
+							<p:column headerText="Type">
+								<h:outputText value="#{abs3.type}" />
+							</p:column>
+
+							<p:column headerText="Status">
+								<h:outputText value="#{abs3.status}" />
+							</p:column>
+						</p:dataTable>
+					</p:tab>
+				</p:tabView>
+			</h:form>
+		</div>
+		<div style="height: 300px; float: left"></div>
+
+	</ui:insert>
+</h:body>
+</html>

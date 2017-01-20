@@ -1,0 +1,176 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+<h:head>
+	<title>Vacation Project - Administrator</title>
+</h:head>
+
+<h:body>
+	<h:form id="formbanner" style="margin: auto">
+		<h1>
+			Vacation Requests - <small><h:outputLabel
+					value="#{userSessionBean.currentUser.role} interface" /></small>
+		</h1>
+	</h:form>
+
+	<h:form id="menu" style="margin: auto">
+		<p:menubar>
+			<p:menuitem value="Search employee" url="/templateAdmin.xhtml"
+				icon="ui-icon-search" />
+			<p:submenu label="Manage Accounts" icon="ui-icon-person">
+				<p:menuitem value="Add new employee" url="/admin/newAccount.xhtml"
+					icon="ui-icon-plusthick" />
+				<p:menuitem value="Remove employee" url="/admin/removeAccount.xhtml"
+					icon="ui-icon-closethick" />
+				<p:menuitem value="Activate account"
+					url="/admin/activateAccount.xhtml"
+					icon="ui-icon-arrowreturnthick-1-n" />
+			</p:submenu>
+			<p:submenu label="Manage Departments" icon="ui-icon-gear">
+				<p:menuitem value="Add new department" url="#"
+					icon="ui-icon-plusthick" />
+				<p:menuitem value="Remove department" url="#"
+					icon="ui-icon-closethick" />
+				<p:menuitem value="Activate department"
+					url="#"
+					icon="ui-icon-arrowreturnthick-1-n" />
+			</p:submenu>
+
+			<f:facet name="options">
+				<p:outputLabel value="Welcome: #{userSessionBean.currentUser.userName}" />
+				<p:spacer width="50" height="10" />
+				<p:commandButton value="Logout" icon="ui-icon-extlink"
+					action="#{userSessionBean.logout()}" />
+			</f:facet>
+		</p:menubar>
+	</h:form>
+
+
+	<ui:insert name="contentAdmin">
+
+		<h:form id="formSearchBy" style="margin: auto">
+			<p:panel id="panelSearchBy" header="Search Employee"
+				toggleable="true">
+
+				<p:growl id="messageSearch" showDetail="true" />
+
+				<h:panelGrid columns="9" cellpadding="5">
+					<p:outputLabel for="searchSelect" value="Search by: " />
+
+					<p:selectOneMenu id="searchSelect" immediate="true"
+						value="#{employeesBean.searchCriteria}">
+						<p:ajax update="searchElem" />
+						<f:selectItem itemLabel="Select One" itemValue="0" />
+						<f:selectItem itemLabel="Name" itemValue="1" />
+						<f:selectItem itemLabel="Manager" itemValue="2" />
+						<f:selectItem itemLabel="Departement" itemValue="3" />
+					</p:selectOneMenu>
+
+					<p:inputText id="searchElem" binding="#{inputSearch}"
+						disabled="#{employeesBean.searchCriteria==null or employeesBean.searchCriteria=='0'}" />
+
+					<p:commandButton value="Search"
+						update=":formDataTable:employeesList messageSearch"
+						action="#{employeesBean.getEmployeeByField(inputSearch.value, 1)}"
+						icon="ui-icon-search" />
+
+					<p:spacer width="25" height="0" />
+
+					<p:commandButton value="Reset search" icon="ui-icon-close"
+						process="@this"
+						action="#{employeesBean.getEmployeeByField('clearSearch', 0)}"
+						update=":formDataTable:employeesList panelSearchBy">
+						<p:resetInput target="panelSearchBy" />
+					</p:commandButton>
+
+					<p:spacer width="150" height="0" />
+
+					<p:selectBooleanCheckbox value="#{employeesBean.viewRetired}">
+						<p:ajax update=":formDataTable:employeesList"
+							listener="#{employeesBean.getEmployeeByField(inputSearch.value, 0)}" />
+					</p:selectBooleanCheckbox>
+					<p:outputLabel value="View retired employees" />
+
+				</h:panelGrid>
+			</p:panel>
+		</h:form>
+
+		<h:form id="formDataTable">
+			<p:growl id="msgs" showDetail="true" />
+
+			<p:dataTable id="employeesList" value="#{employeesBean.allActiveEmployees}"
+				var="emp" resizableColumns="true" rows="10" paginator="true"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="10,50,100" lazy="true"
+				paginatorPosition="bottom">
+
+				<f:facet name="header">
+					<div align="right">
+						<h:commandLink>
+							<p:graphicImage value="/resources/images/excel.png" width="24" />
+							<p:dataExporter type="xls" target="employeesList"
+								fileName="Employees" />
+						</h:commandLink>
+						<p:spacer width="10" />
+						<h:commandLink>
+							<p:graphicImage value="/resources/images/pdf.png" width="24" />
+							<p:dataExporter type="pdf" target="employeesList"
+								fileName="Employees" />
+						</h:commandLink>
+						<p:spacer width="20" />
+					</div>
+					<div align="left">
+						<h:outputText value="Employees" />
+					</div>
+				</f:facet>
+
+				<p:column headerText="Employee Id"
+					style="width:150px;text-align:center">
+					<h:outputText value="#{emp.employeeId}" />
+				</p:column>
+
+				<p:column headerText="Fisrt Name" style="width:150px;text-align:center">
+					<h:outputText value="#{emp.firstName}" />
+				</p:column>
+
+				<p:column headerText="Last Name" style="text-align: center;">
+					<h:outputText value="#{emp.lastName}" />
+				</p:column>
+
+				<p:column headerText="Hire Date" style="width:150px;text-align:center">
+					<h:outputText value="#{emp.hireDate}" />
+				</p:column>
+				
+				<p:column headerText="Manager Name" style="width:150px;text-align:center">
+					<h:outputText value="#{emp.manager.firstName} #{emp.manager.lastName}" />
+				</p:column>
+				
+				<p:column headerText="Department Name" style="width:150px;text-align:center">
+					<h:outputText value="#{emp.department.departmentName}" />
+				</p:column>
+				
+				<p:column headerText="Role" style="width:150px;text-align:center">
+					<h:outputText value="#{emp.user.role}" />
+				</p:column>
+				
+				<p:column headerText="IsActive" style="width:150px;text-align:center">
+					<h:outputText value="#{emp.active}" />
+				</p:column>
+
+				<p:column headerText="Edit employee"
+					style="width:150px;text-align:center" exportable="false">
+					<p:commandButton
+						icon="ui-icon-pencil"
+						value="Edit" style="height:30px;">
+					</p:commandButton>
+				</p:column>
+
+			</p:dataTable>
+		</h:form>
+	</ui:insert>
+
+</h:body>
+</html>

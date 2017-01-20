@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:p="http://primefaces.org/ui" template="/templateAccountant.xhtml">
+
+	<ui:define name="contentAccountant">
+		<div id="PhLeft" style="float: left">
+			<p:tabView>
+				<p:tab title="Public Holiday">
+
+					<h:form id="formNewPH" style="margin: auto">
+						<p:growl id="messageNewPH" />
+
+						<h:panelGrid columns="2" cellpadding="10">
+
+							<p:outputLabel for="startDate"> Date:</p:outputLabel>
+							<p:calendar id="startDate" value="#{day}" label="startDate"
+								required="true" />
+
+							<p:commandButton id="submitPH" value="Save" icon="ui-icon-disk"
+								update="messageNewPH, formNewPH"></p:commandButton>
+
+						</h:panelGrid>
+					</h:form>
+				</p:tab>
+			</p:tabView>
+		</div>
+	</ui:define>
+</ui:composition>

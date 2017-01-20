@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:p="http://primefaces.org/ui" template="/templateAdmin.xhtml">
+
+	<ui:define name="contentAdmin">
+
+		<h:form id="formNewAccount">
+			<p:panel id="panelNewAccount" header="Add a new employee"
+				style="margin-bottom:10px;">
+
+				<p:growl id="messageNewAccount" />
+
+				<h:panelGrid columns="3" cellpadding="10">
+
+					<p:outputLabel for="firstName" value="First Name: " />
+					<p:inputText id="firstName"
+						value="#{employeesBean.employee.firstName}" required="true"
+						label="firstName" />
+					<p:watermark for="firstName" value="First name" id="watermark1" />
+
+					<p:outputLabel for="lastName" value="Last Name: " />
+					<p:inputText id="lastName" value="#{employeesBean.employee.lastName}"
+						required="true" label="lastName" />
+					<p:watermark for="lastName" value="Last name" id="watermark2" />
+					
+					<p:outputLabel for="popup" value="Hire date: " />
+			        <p:calendar id="popup" value="#{employeesBean.utilDate}" 
+			        	label="popup" required="true"/>
+					<p:watermark for="popup" value="" id="watermark3" />
+
+					<p:outputLabel for="managerId" value="Manager Id: " />
+					<p:inputText id="managerId" value="#{employeesBean.employee.manager.employeeId}"
+						required="true" label="managerId" />
+					<p:watermark for="managerId" value="Manager Id" id="watermark4" />
+					
+					<p:outputLabel for="departmentId" value="Department Id: " />
+					<p:inputText id="departmentId" value="#{employeesBean.employee.department.departmentId}"
+						required="true" label="departmentId" />
+					<p:watermark for="departmentId" value="Department Id" id="watermark5" />
+					
+					<p:outputLabel for="ptoAvailable" value="PTO Available: " />
+					<p:inputText id="ptoAvailable" value="#{employeesBean.employee.ptoAvailable}"
+						required="true" label="ptoAvailable" />
+					<p:watermark for="ptoAvailable" value="PTO Available" id="watermark6" />
+					
+					<p:outputLabel for="username" value="Username: " />
+					<p:inputText id="username" value="#{employeesBean.employee.user.userName}"
+						required="true" label="username" />
+					<p:watermark for="username" value="Max 32 characters"
+						id="watermark7" />
+						
+					<p:outputLabel for="pass" value="Password: " />
+					<p:password id="pass" value="#{employeesBean.employee.user.password}"
+						required="true" label="pass" />
+					<p:watermark for="pass" value="" id="watermark8" />
+
+					<p:outputLabel for="cpassw" value="Confirm the password: " />
+					<p:password id="cpassw"
+						value="#{employeesBean.employee.user.confirmationPassword}" required="true"
+						label="cpassw" />
+					<p:watermark for="cpassw" value="" id="watermark9" />
+					
+					<p:outputLabel for="role" value="User Role: " />
+					<p:selectOneMenu id="role" label="role"
+						value="#{employeesBean.employee.user.role}" >
+						<f:selectItem itemLabel="Select Role" itemValue="" noSelectionOption="false" />
+                		<f:selectItems value="#{employeesBean.userRole}" />
+					</p:selectOneMenu>
+					<p:watermark for="role" value="" id="watermark10" />      
+        
+					<p:outputLabel style="display: block" />
+
+					<p:commandButton id="save" action="#{employeesBean.addNewEmployee()}"
+						value="Save" icon="ui-icon-disk"
+						update="messageNewAccount, panelNewAccount" />
+				</h:panelGrid>
+			</p:panel>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

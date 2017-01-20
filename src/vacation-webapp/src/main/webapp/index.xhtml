@@ -1,0 +1,40 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>VACATION Project</title>
+</h:head>
+
+<h:body>
+
+	<div id="banner" align="center">
+		<p:graphicImage value="/resources/images/vacation-banner.jpg"
+			alt="Vacation App" width="80%" height="160px" />
+	</div>
+
+	<div id="loginAdmin" align="center" style="margin: auto">
+		<h:form id="formLogin">
+			<p:growl id="messageLogIn" showDetail="true" sticky="true" />
+
+			<h:panelGrid columns="2" cellpadding="10">
+
+				<p:outputLabel for="username" value="Username:" />
+				<p:inputText id="username" value="#{userSessionBean.currentUser.userName}"
+					required="true" label="username" />
+
+				<p:outputLabel for="password" value="Password:" />
+				<p:password id="password" value="#{userSessionBean.currentUser.password}"
+					required="true" label="password" />
+
+				<p:outputLabel style="display: block" />
+
+				<p:commandButton id="login" action="#{userSessionBean.login()}"
+					value="Login" icon="ui-icon-circle-arrow-e" update="messageLogIn" />
+			</h:panelGrid>
+		</h:form>
+	</div>
+
+</h:body>
+</html>

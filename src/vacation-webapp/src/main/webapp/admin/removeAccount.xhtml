@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:p="http://primefaces.org/ui" template="/templateAdmin.xhtml">
+
+	<ui:define name="contentAdmin">
+		<h:form>
+			<p:growl id="messageRemove" />
+			<p:commandButton process="checkboxDT" icon="ui-icon-circle-close"
+				value="Remove" ajax="false" update="messageRemove checkboxDT"
+				actionListener="#{employeesBean.softDeleteEmployeeAndUserAccount()}">
+			</p:commandButton>
+			<p:dataTable id="checkboxDT" value="#{employeesBean.allActiveEmployees}"
+				var="employee" selection="#{employeesBean.selectedEmployees}"
+				rowKey="#{employee.employeeId}" style="margin-bottom:0">
+				<f:facet name="header">
+					<p:outputLabel>Employees</p:outputLabel>
+				</f:facet>
+
+				<p:column selectionMode="multiple"
+					style="width:16px;text-align:center" />
+				<p:column headerText="Id" style="text-align: center;">
+					<h:outputText value="#{employee.employeeId}" />
+				</p:column>
+				<p:column headerText="Username" style="text-align: center;">
+					<h:outputText value="#{employee.user.userName}" />
+				</p:column>
+				
+				<p:column headerText="First Name" style="text-align: center;">
+					<h:outputText value="#{employee.firstName}" />
+				</p:column>
+				<p:column headerText="Last Name" style="text-align: center;">
+					<h:outputText value="#{employee.lastName}" />
+				</p:column>
+				<p:column headerText="Hire Date" style="text-align: center;">
+					<h:outputText value="#{employee.hireDate}" />
+				</p:column>
+				<p:column headerText="Role" style="text-align: center;">
+					<h:outputText value="#{employee.user.role}" />
+				</p:column>
+				<p:column headerText="Manager Name" style="text-align: center;">
+					<h:outputText value="#{employee.manager.firstName} #{employee.manager.lastName}" />
+				</p:column>
+				<p:column headerText="Department Name" style="text-align: center;">
+					<h:outputText value="#{employee.department.departmentName}" />
+				</p:column>
+				
+				<f:facet name="footer">
+					<p:outputLabel>Total: #{fn:length(employeesBean.allActiveEmployees)} employees</p:outputLabel>
+				</f:facet>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>
